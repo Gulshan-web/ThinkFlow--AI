@@ -1,0 +1,420 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* ========================================
+GLOBAL RESET
+======================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+html,
+body,
+#root {
+    width: 100%;
+    min-height: 100%;
+    font-family: Inter, sans-serif;
+}
+
+
+body {
+    background: #020617;
+    color: white;
+}
+
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+
+/* ========================================
+THINKFLOW AI — SHARP CLEAN EDGES
+======================================== */
+
+
+/* Main edge */
+
+.react-flow__edge-path {
+    stroke: #22d3ee !important;
+
+    stroke-width: 2.5px !important;
+
+    stroke-linecap: round;
+
+    stroke-linejoin: round;
+
+    /*
+    SVG shadow completely removed.
+    */
+
+    filter: none !important;
+
+    transition:
+        stroke 0.25s ease,
+        stroke-width 0.25s ease;
+}
+
+
+/* Hover edge */
+
+.react-flow__edge:hover
+.react-flow__edge-path {
+
+    stroke: #67e8f9 !important;
+
+    stroke-width: 3.5px !important;
+
+    filter: none !important;
+}
+
+
+/* Animated edge */
+
+.react-flow__edge.animated
+.react-flow__edge-path {
+
+    stroke-dasharray: 8 6;
+
+    animation:
+        thinkflow-edge-flow
+        1.2s linear infinite;
+}
+
+
+/* Edge animation */
+
+@keyframes thinkflow-edge-flow {
+
+    from {
+
+        stroke-dashoffset: 14;
+
+    }
+
+    to {
+
+        stroke-dashoffset: 0;
+
+    }
+
+}
+
+
+/* ========================================
+THINKFLOW EXPORT — FIX EDGE JOIN BLUR
+======================================== */
+
+
+/*
+Export ke time main edge ko clean aur sharp rakho.
+*/
+
+.thinkflow-exporting .react-flow__edge-path {
+
+    filter: none !important;
+
+    animation: none !important;
+
+    transition: none !important;
+
+    /*
+    Animated edge ko export me solid banaya.
+    */
+
+    stroke-dasharray: none !important;
+
+    stroke-dashoffset: 0 !important;
+
+    /*
+    Better SVG rendering.
+    */
+
+    shape-rendering:
+        geometricPrecision !important;
+
+    /*
+    IMPORTANT:
+
+    Jab ek node se 3 ya usse zyada
+    edges divide hoti hain, round caps
+    overlap karke chhota blur/blob
+    create kar sakti hain.
+
+    Export ke time flat cap use hoga.
+    */
+
+    stroke-linecap:
+        butt !important;
+
+    /*
+    Edge joins ko sharp aur clean rakho.
+    */
+
+    stroke-linejoin:
+        bevel !important;
+
+    /*
+    Zoom/export scale ke time
+    stroke ko consistent rakho.
+    */
+
+    vector-effect:
+        non-scaling-stroke !important;
+}
+
+
+/*
+React Flow ka invisible wide interaction path
+sirf mouse click/hover ke liye hota hai.
+
+Export image me iski zarurat nahi hai.
+*/
+
+.thinkflow-exporting
+.react-flow__edge-interaction {
+
+    display: none !important;
+
+}
+
+
+/*
+Complete edge group se filter remove.
+*/
+
+.thinkflow-exporting
+.react-flow__edge {
+
+    filter: none !important;
+
+    opacity: 1 !important;
+
+}
+
+
+/*
+Node par koi filter ya blur export
+ke time apply nahi hoga.
+*/
+
+/* ========================================
+REMOVE NODE BACKDROP BLUR DURING EXPORT
+======================================== */
+
+.thinkflow-exporting
+.react-flow__node {
+
+    /*
+    html-to-image backdrop-filter ko
+    galat rectangular blur area me
+    convert kar raha tha.
+    */
+
+    backdrop-filter:
+        none !important;
+
+    -webkit-backdrop-filter:
+        none !important;
+
+    filter:
+        none !important;
+
+}
+
+
+/*
+Custom node ke actual content par bhi
+backdrop blur remove karo.
+*/
+
+.thinkflow-exporting
+.react-flow__node > div {
+
+    backdrop-filter:
+        none !important;
+
+    -webkit-backdrop-filter:
+        none !important;
+
+    filter:
+        none !important;
+
+}
+
+
+/*
+React Flow handles par koi glow/blur
+export ke time apply nahi hoga.
+*/
+
+.thinkflow-exporting
+.react-flow__handle {
+
+    filter: none !important;
+
+    box-shadow: none !important;
+
+}
+
+
+/* ========================================
+THINKFLOW AI — LIGHT THEME
+======================================== */
+
+
+body.light-theme {
+
+    background:
+        #f1f5f9;
+
+    color:
+        #0f172a;
+
+}
+
+
+/* Main workspace background */
+
+body.light-theme
+.react-flow {
+
+    background:
+        #e2e8f0;
+
+}
+
+
+/* Toolbar */
+
+body.light-theme
+.bg-slate-900\/90 {
+
+    background-color:
+        rgba(
+            255,
+            255,
+            255,
+            0.92
+        ) !important;
+
+    border-color:
+        rgba(
+            15,
+            23,
+            42,
+            0.12
+        ) !important;
+
+}
+
+
+/* Sidebar and cards */
+
+body.light-theme
+.bg-slate-800 {
+
+    background-color:
+        #f8fafc !important;
+
+    border-color:
+        rgba(
+            15,
+            23,
+            42,
+            0.12
+        ) !important;
+
+}
+
+
+/* Toolbar buttons */
+
+body.light-theme
+.bg-slate-700 {
+
+    background-color:
+        #e2e8f0 !important;
+
+}
+
+
+/* Main text */
+
+body.light-theme
+.text-white {
+
+    color:
+        #0f172a !important;
+
+}
+
+
+/* Secondary text */
+
+body.light-theme
+.text-slate-300 {
+
+    color:
+        #334155 !important;
+
+}
+
+
+body.light-theme
+.text-slate-400 {
+
+    color:
+        #475569 !important;
+
+}
+
+
+/* Inputs */
+
+body.light-theme input,
+body.light-theme textarea {
+
+    background:
+        #ffffff !important;
+
+    color:
+        #0f172a !important;
+
+    border-color:
+        #cbd5e1 !important;
+
+}
+
+
+/* React Flow controls */
+
+body.light-theme
+.react-flow__controls {
+
+    background:
+        #ffffff;
+
+}
+
+
+body.light-theme
+.react-flow__controls button {
+
+    background:
+        #ffffff;
+
+    color:
+        #0f172a;
+
+    border-color:
+        #cbd5e1;
+
+}
