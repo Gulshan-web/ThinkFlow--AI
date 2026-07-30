@@ -4,6 +4,7 @@ import WorkspaceHeader from "../workspace/WorkspaceHeader";
 import FlowCanvas from "../workspace/FlowCanvas";
 import RightSidebar from "../workspace/RightSidebar";
 import FloatingMenu from "../workspace/FloatingMenu";
+import AIExplainModal from "../components/ai/AIExplainModal";
 
 import AIInput from "../components/AIInput";
 
@@ -29,9 +30,15 @@ function Workspace() {
     */
 
     const {
-        nodes,
-        loadAIMindMap,
-    } = useMindMap();
+    nodes,
+    loadAIMindMap,
+
+    aiExplanation,
+    showAIExplanation,
+
+    closeAIExplanation,
+
+} = useMindMap();
 
 
     /*
@@ -178,6 +185,11 @@ function Workspace() {
 
 
             <FloatingMenu />
+            <AIExplainModal
+    open={showAIExplanation}
+    explanation={aiExplanation}
+    onClose={closeAIExplanation}
+/>
 
         </div>
 

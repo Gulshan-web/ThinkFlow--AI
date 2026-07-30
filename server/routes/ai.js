@@ -140,6 +140,68 @@ router.post("/explain", async (req, res) => {
 
         if (!topic) {
             return res.status(400).json({
+                error: "Topic is required",
+            });
+        }
+
+        const completion = await groq.chat.completions.create({
+            model: "llama-3.3-70b-versatile",
+            temperature: 0.3,
+            max_tokens: 700,
+            messages: [
+                {
+                    role: "system",
+                    content: `
+You are an AI tutor.
+
+Return ONLY valid JSON.
+
+Format:
+
+{
+  "title":"Topic",
+  "summary":"2-4 paragraph explanation",
+  "keyPoints":[
+    "Point 1",
+    "Point 2",
+    "Point 3",
+    "Point 4"
+  ]
+}
+`
+                },
+                {
+                    role: "user",
+                    content: topic,
+                },
+            ],
+        });
+
+        const text = completion.choices[0].message.content
+            .replace(/```json/g, "")
+            .replace(/```/g, "")
+            .trim();
+
+        res.json(JSON.parse(text));
+
+    } catch (err) {
+
+        console.error(err);
+
+        res.status(500).json({
+            error: err.message,
+        });
+
+    }
+});
+
+router.post("/explain", async (req, res) => {
+    try {
+
+        const { topic } = req.body;
+
+        if (!topic) {
+            return res.status(400).json({
                 error: "Topic is required"
             });
         }

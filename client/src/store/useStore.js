@@ -122,6 +122,21 @@ const useStore = create(
 
     (set, get) => ({
 
+        setAIExplanation: (data) =>
+            set({
+                aiExplanation: data,
+                showAIExplanation: true,
+            }),
+
+        closeAIExplanation: () =>
+            set({
+                showAIExplanation: false,
+                aiExplanation: null,
+            }),
+
+        aiExplanation: null,
+        showAIExplanation: false,
+
         /* ----------------------------------------- */
         /* INITIAL STATE                             */
         /* ----------------------------------------- */
@@ -764,7 +779,7 @@ const useStore = create(
             const previous =
 
                 history[
-                    history.length - 1
+                history.length - 1
                 ];
 
 
@@ -847,7 +862,7 @@ const useStore = create(
             const next =
 
                 future[
-                    future.length - 1
+                future.length - 1
                 ];
 
 
@@ -1071,13 +1086,6 @@ const useStore = create(
             );
 
 
-            console.log(
-
-                "STORE UPDATED"
-
-            );
-
-
             /*
             AI generated mind map
             localStorage me save hoga.
@@ -1097,7 +1105,33 @@ const useStore = create(
         /* ----------------------------------------- */
         /* EXPAND NODE WITH AI                       */
         /* ----------------------------------------- */
+        explainNodeAI: async (topic) => {
 
+            try {
+
+                const { explainMindMapNode } =
+                    await import("../services/aiService");
+
+                const result =
+                    await explainMindMapNode(topic);
+
+                set({
+
+                    aiExplanation: result,
+
+                    showAIExplanation: true,
+
+                });
+
+            }
+
+            catch (err) {
+
+                console.error(err);
+
+            }
+
+        },
         async expandNodeAI(
             id
         ) {
@@ -1140,15 +1174,6 @@ const useStore = create(
                         parentNode.data.label
 
                     );
-
-
-                console.log(
-
-                    "AI Result:",
-
-                    result
-
-                );
 
 
                 if (
@@ -1324,17 +1349,10 @@ const useStore = create(
 
                 toast.success("AI Node Expanded");
 
-
-                console.log(
-
-                    "AI Expansion Complete"
-
-                );
-
             }
 
             catch (
-                err
+            err
             ) {
 
                 console.error(

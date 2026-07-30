@@ -1,5 +1,6 @@
 import { memo } from "react";
 
+import { BookOpen } from "lucide-react";
 import {
     Handle,
     Position,
@@ -26,18 +27,17 @@ function CustomNode({
 }) {
 
     const {
+    deleteNode,
+    duplicateNode,
+    setSelectedNode,
+    expandNodeAI,
+    explainNodeAI,
+    searchedNodeId,
+} = useMindMap();
 
-        deleteNode,
-
-        duplicateNode,
-
-        setSelectedNode,
-
-        expandNodeAI,
-
-        searchedNodeId,
-
-    } = useMindMap();
+    function handleExplain() {
+        explainNodeAI(data.label);
+    }
 
 
     /* =====================================
@@ -237,11 +237,9 @@ function CustomNode({
 
                 transition-all
 
-                ${
+                ${isSearchedNode
 
-                    isSearchedNode
-
-                        ? `
+                    ? `
                             border-yellow-400
 
                             ring-4
@@ -251,9 +249,9 @@ function CustomNode({
                             animate-pulse
                           `
 
-                        : selected
+                    : selected
 
-                            ? `
+                        ? `
                                 border-cyan-400
 
                                 ring-2
@@ -261,7 +259,7 @@ function CustomNode({
                                 ring-cyan-400/40
                               `
 
-                            : `
+                        : `
                                 border-black
                               `
 
@@ -463,6 +461,21 @@ function CustomNode({
 
 
                 {/* AI EXPAND */}
+
+                <button
+                    onClick={handleExplain}
+                    className="
+        rounded-lg
+        bg-slate-700
+        p-2
+        transition
+        hover:bg-emerald-500
+    "
+                    title="Explain with AI"
+                >
+                    <BookOpen size={16} />
+                </button>
+               
 
                 <button
 

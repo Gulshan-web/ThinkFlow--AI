@@ -10,36 +10,41 @@ function useMindMap() {
 
     const {
 
-        nodes,
-        edges,
+    nodes,
+    edges,
 
-        selectedNode,
+    selectedNode,
 
-        searchedNodeId,
+    searchedNodeId,
 
-        onNodesChange,
-        onEdgesChange,
-        onConnect,
+    onNodesChange,
+    onEdgesChange,
+    onConnect,
 
-        addNode,
-        updateNode,
-        deleteNode,
-        duplicateNode,
+    addNode,
+    updateNode,
+    deleteNode,
+    duplicateNode,
 
-        setSelectedNode,
+    setSelectedNode,
 
-        clearCanvas,
+    clearCanvas,
 
-        undo,
-        redo,
+    undo,
+    redo,
 
-        expandNodeAI,
+    expandNodeAI,
+    explainNodeAI,
 
-        loadAIMindMap,
+    loadAIMindMap,
 
-        setSearchedNode,
+    setSearchedNode,
 
-    } = useStore();
+    aiExplanation,
+    showAIExplanation,
+    closeAIExplanation,
+
+} = useStore();
 
 
     /* =========================================
@@ -297,12 +302,13 @@ function useMindMap() {
         searchNode,
 
 
-        /* AI */
+       /* AI */
 
-        expandNodeAI,
+expandNodeAI,
 
-        loadAIMindMap,
+explainNodeAI,
 
+loadAIMindMap,
 
         /* Export */
 
@@ -320,6 +326,10 @@ function useMindMap() {
         undo,
 
         redo,
+
+        aiExplanation,
+        showAIExplanation,
+        closeAIExplanation,
 
     };
 

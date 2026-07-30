@@ -51,6 +51,28 @@ export async function expandNode(topic) {
 
     return await response.json();
 }
+export async function explainNode(topic) {
+
+    const response = await fetch(`${API}/explain`, {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({
+            topic,
+        }),
+
+    });
+
+    if (!response.ok) {
+        throw new Error("Failed to explain node");
+    }
+
+    return await response.json();
+}
 
 export async function explainNode(topic) {
 

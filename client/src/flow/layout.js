@@ -13,7 +13,6 @@ export function autoLayout(nodes, edges) {
         return nodes;
     }
 
-    // Find root node
     const root =
         nodes.find(
             (node) =>

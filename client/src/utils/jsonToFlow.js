@@ -13,7 +13,6 @@ export function jsonToFlow(tree) {
             id,
             type: "custom",
 
-            // Dagre baad me overwrite karega
             position: {
                 x: 0,
                 y: 0,
