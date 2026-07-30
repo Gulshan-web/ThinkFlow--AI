@@ -1,5 +1,6 @@
-const API = "https://thinkflow-ai.onrender.com/api";
-
+const API =
+  import.meta.env.VITE_API_URL ||
+  "http://localhost:5000/api";
 /* ---------------- Generate Mind Map ---------------- */
 
 export async function generateMindMap(idea) {
