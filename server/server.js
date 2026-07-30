@@ -1,5 +1,5 @@
 import express from "express";
-import cors from "cors";
+
 import dotenv from "dotenv";
 
 import aiRoutes from "./routes/ai.js";
@@ -22,7 +22,6 @@ app.use(
     credentials: true,
   })
 );
-app.options("*", cors());
 
 app.use(express.json());
 
