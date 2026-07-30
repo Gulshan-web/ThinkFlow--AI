@@ -5,47 +5,45 @@ import {
 
 import useStore from "../store/useStore";
 
-
 function useMindMap() {
 
     const {
 
-    nodes,
-    edges,
+        nodes,
+        edges,
 
-    selectedNode,
+        selectedNode,
 
-    searchedNodeId,
+        searchedNodeId,
 
-    onNodesChange,
-    onEdgesChange,
-    onConnect,
+        onNodesChange,
+        onEdgesChange,
+        onConnect,
 
-    addNode,
-    updateNode,
-    deleteNode,
-    duplicateNode,
+        addNode,
+        updateNode,
+        deleteNode,
+        duplicateNode,
 
-    setSelectedNode,
+        setSelectedNode,
 
-    clearCanvas,
+        clearCanvas,
 
-    undo,
-    redo,
+        undo,
+        redo,
 
-    expandNodeAI,
-    explainNodeAI,
+        expandNodeAI,
+        explainNodeAI,
 
-    loadAIMindMap,
+        loadAIMindMap,
 
-    setSearchedNode,
+        setSearchedNode,
 
-    aiExplanation,
-    showAIExplanation,
-    closeAIExplanation,
+        aiExplanation,
+        showAIExplanation,
+        closeAIExplanation,
 
-} = useStore();
-
+    } = useStore();
 
     /* =========================================
        SEARCH NODE
@@ -53,93 +51,35 @@ function useMindMap() {
 
     const searchNode = (text) => {
 
-        /*
-        Remove extra spaces.
-        */
-
         const keyword =
-            text
-                .trim()
-                .toLowerCase();
-
-        /*
-        If search input is empty,
-        remove previous highlight.
-        */
+            text.trim().toLowerCase();
 
         if (!keyword) {
 
-            setSearchedNode(
-                null
-            );
+            setSearchedNode(null);
 
             return null;
 
         }
 
+        const foundNode = nodes.find((node) => {
 
-        /*
-        Find first matching node.
-        */
+            const label =
+                (node.data?.label || "").toLowerCase();
 
-        const foundNode =
+            const category =
+                (node.data?.category || "").toLowerCase();
 
-            nodes.find(
-                (node) => {
+            const description =
+                (node.data?.description || "").toLowerCase();
 
-                    const label =
-
-                        (
-                            node.data?.label ||
-                            ""
-                        )
-                            .toLowerCase();
-
-
-                    const category =
-
-                        (
-                            node.data?.category ||
-                            ""
-                        )
-                            .toLowerCase();
-
-
-                    const description =
-
-                        (
-                            node.data?.description ||
-                            ""
-                        )
-                            .toLowerCase();
-
-
-                    return (
-
-                        label.includes(
-                            keyword
-                        )
-
-                        ||
-
-                        category.includes(
-                            keyword
-                        )
-
-                        ||
-
-                        description.includes(
-                            keyword
-                        )
-
-                    );
-
-                }
+            return (
+                label.includes(keyword) ||
+                category.includes(keyword) ||
+                description.includes(keyword)
             );
 
-        /*
-        Save matching node ID.
-        */
+        });
 
         setSearchedNode(
 
@@ -149,16 +89,9 @@ function useMindMap() {
 
         );
 
-
-        /*
-        Return node if needed
-        by Search component.
-        */
-
         return foundNode || null;
 
     };
-
 
     /* =========================================
        EXPORT JSON
@@ -169,94 +102,46 @@ function useMindMap() {
         const data = {
 
             nodes,
-
             edges,
 
         };
 
+        const blob = new Blob(
 
-        const blob =
+            [
+                JSON.stringify(
+                    data,
+                    null,
+                    2
+                )
+            ],
 
-            new Blob(
-
-                [
-
-                    JSON.stringify(
-
-                        data,
-
-                        null,
-
-                        2
-
-                    )
-
-                ],
-
-                {
-
-                    type:
-
-                        "application/json",
-
-                }
-
-            );
-
-
-        const url =
-
-            URL.createObjectURL(
-
-                blob
-
-            );
-
-
-        const link =
-
-            document.createElement(
-
-                "a"
-
-            );
-
-
-        link.href =
-
-            url;
-
-
-        link.download =
-
-            "ThinkFlowAI.json";
-
-
-        document.body.appendChild(
-
-            link
+            {
+                type: "application/json",
+            }
 
         );
 
+        const url =
+            URL.createObjectURL(blob);
+
+        const link =
+            document.createElement("a");
+
+        link.href = url;
+
+        link.download =
+            "ThinkFlowAI.json";
+
+        document.body.appendChild(link);
 
         link.click();
 
+        document.body.removeChild(link);
 
-        document.body.removeChild(
-
-            link
-
-        );
-
-
-        URL.revokeObjectURL(
-
-            url
-
-        );
+        URL.revokeObjectURL(url);
 
     };
-
 
     /* =========================================
        RETURN
@@ -264,76 +149,60 @@ function useMindMap() {
 
     return {
 
-        /* Data */
+        /* DATA */
 
         nodes,
-
         edges,
 
         selectedNode,
 
         searchedNodeId,
 
-
-        /* React Flow */
+        /* REACT FLOW */
 
         onNodesChange,
-
         onEdgesChange,
-
         onConnect,
 
-
-        /* Node Actions */
+        /* NODE */
 
         addNode,
-
         updateNode,
-
         deleteNode,
-
         duplicateNode,
 
         setSelectedNode,
 
-
-        /* Search */
+        /* SEARCH */
 
         searchNode,
 
+        /* AI */
 
-       /* AI */
+        expandNodeAI,
+        explainNodeAI,
 
-expandNodeAI,
-
-explainNodeAI,
-
-loadAIMindMap,
-
-        /* Export */
-
-        exportJSON,
-
-        exportPNG,
-
-        exportPDF,
-
-
-        /* Canvas */
-
-        clearCanvas,
-
-        undo,
-
-        redo,
+        loadAIMindMap,
 
         aiExplanation,
         showAIExplanation,
         closeAIExplanation,
 
+        /* EXPORT */
+
+        exportJSON,
+        exportPNG,
+        exportPDF,
+
+        /* CANVAS */
+
+        clearCanvas,
+
+        undo,
+        redo,
+
     };
 
 }
-
 
 export default useMindMap;
