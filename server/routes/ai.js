@@ -133,4 +133,73 @@ Return only JSON.
     }
 });
 
+router.post("/explain", async (req, res) => {
+    try {
+
+        const { topic } = req.body;
+
+        if (!topic) {
+            return res.status(400).json({
+                error: "Topic is required"
+            });
+        }
+
+        const response = await groq.chat.completions.create({
+
+            model: "llama-3.3-70b-versatile",
+
+            temperature: 0.5,
+
+            max_tokens: 600,
+
+            messages: [
+
+                {
+                    role: "system",
+                    content: `
+You are an expert teacher.
+
+Explain the topic clearly.
+
+Return ONLY JSON.
+
+{
+   "title":"Topic",
+   "summary":"...",
+   "keyPoints":[
+      "...",
+      "...",
+      "..."
+   ]
+}
+`
+                },
+
+                {
+                    role: "user",
+                    content: topic
+                }
+
+            ]
+
+        });
+
+        const text = response.choices[0].message.content
+            .replace(/```json/g, "")
+            .replace(/```/g, "")
+            .trim();
+
+        res.json(JSON.parse(text));
+
+    } catch (err) {
+
+        console.log(err);
+
+        res.status(500).json({
+            error: err.message
+        });
+
+    }
+});
+
 export default router;
