@@ -1,4 +1,4 @@
-const API = "https://refreshing-purpose-production-3cbf.up.railway.app/api";
+const API = "https://thinkflow-ai.onrender.com/api";
 
 /* ---------------- Generate Mind Map ---------------- */
 
