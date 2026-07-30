@@ -15,13 +15,15 @@ import cors from "cors";
 app.use(
   cors({
     origin: [
-      "https://think-flow-ai-zeta.vercel.app",
       "http://localhost:5173",
+      "https://think-flow-ai-zeta.vercel.app",
     ],
     methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type"],
+    credentials: true,
   })
 );
+app.options("*", cors());
+
 app.use(express.json());
 
 app.use("/api", aiRoutes);
