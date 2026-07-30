@@ -10,7 +10,18 @@ console.log("GROQ =", process.env.GROQ_API_KEY);
 
 const app = express();
 
-app.use(cors());
+import cors from "cors";
+
+app.use(
+  cors({
+    origin: [
+      "https://think-flow-ai-zeta.vercel.app",
+      "http://localhost:5173",
+    ],
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type"],
+  })
+);
 app.use(express.json());
 
 app.use("/api", aiRoutes);

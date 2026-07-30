@@ -84,11 +84,6 @@ function Workspace() {
             );
             toast.success("Mind Map Generated Successfully!");
 
-
-            console.log(
-                "Loaded into store"
-            );
-
         }
 
         catch (err) {

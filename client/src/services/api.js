@@ -1,4 +1,4 @@
-const API = "http://localhost:5000/api";
+const API = "https://refreshing-purpose-production-3cbf.up.railway.app/api";
 
 /* ---------------- Generate Mind Map ---------------- */
 
