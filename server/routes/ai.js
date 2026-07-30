@@ -81,6 +81,7 @@ router.post("/expand", async (req, res) => {
         }
 
         const response = await groq.chat.completions.create({
+            
             model: "llama-3.3-70b-versatile",
 
             messages: [
@@ -114,7 +115,7 @@ Return only JSON.
             temperature: 0.7
         });
 
-        const raw = completion.choices[0].message.content;
+        const raw = response.choices[0].message.content;
 
 console.log(raw);
 
@@ -195,13 +196,59 @@ Format:
             ],
         });
 
-        const text = completion.choices[0].message.content
-            .replace(/```json/g, "")
-            .replace(/```/g, "")
-            .trim();
+        router.post("/explain", async (req, res) => {
+    try {
 
-        res.json(JSON.parse(text));
+        const { topic } = req.body;
 
+        if (!topic) {
+            return res.status(400).json({
+                error: "Topic is required",
+            });
+        }
+
+        const response = await groq.chat.completions.create({
+            model: "llama-3.3-70b-versatile",
+            temperature: 0.4,
+            max_tokens: 600,
+            messages: [
+                {
+                    role: "system",
+                    content: `
+You are an expert teacher.
+
+Explain the topic clearly using plain text.
+
+Do NOT return JSON.
+Do NOT use markdown.
+Do NOT use code blocks.
+`
+                },
+                {
+                    role: "user",
+                    content: topic
+                }
+            ]
+        });
+
+        const explanation = response.choices[0].message.content.trim();
+
+        return res.json({
+            title: topic,
+            summary: explanation,
+            keyPoints: []
+        });
+
+    } catch (err) {
+
+        console.error(err);
+
+        return res.status(500).json({
+            error: err.message
+        });
+
+    }
+});
     } catch (err) {
 
         console.error(err);
