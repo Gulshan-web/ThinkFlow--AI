@@ -54,12 +54,30 @@ Format:
             ],
         });
 
-        const text = completion.choices[0].message.content
-            .replace(/```json/g, "")
-            .replace(/```/g, "")
-            .trim();
+        const raw = completion.choices[0].message.content;
 
-        res.json(JSON.parse(text));
+console.log("RAW RESPONSE:");
+console.log(raw);
+
+const cleaned = raw
+  .replace(/```json/g, "")
+  .replace(/```/g, "")
+  .trim();
+
+try {
+    const parsed = JSON.parse(cleaned);
+    return res.json(parsed);
+} catch (err) {
+
+    console.log("INVALID JSON");
+    console.log(cleaned);
+
+    return res.json({
+        title: topic,
+        summary: cleaned,
+        keyPoints: [],
+    });
+}
     } catch (err) {
         console.error(err);
 
