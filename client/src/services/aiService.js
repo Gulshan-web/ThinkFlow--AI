@@ -1,33 +1,25 @@
-import { apiRequest } from "./api";
+import { aiAction } from "./aiActions";
+
+/* ==============================
+   Generate Mind Map
+============================== */
 
 export async function generateMindMap(topic) {
-    try {
-        const result = await apiRequest(
-            "gemini-2.0-flash",
-            {
-                contents: [
-                    {
-                        parts: [
-                            {
-                                text: `
-Generate a hierarchical mind map about:
+    return await aiAction("generate", topic);
+}
 
-${topic}
+/* ==============================
+   Expand Node
+============================== */
 
-Return JSON only.
-`,
-                            },
-                        ],
-                    },
-                ],
-            }
-        );
+export async function expandMindMapNode(topic) {
+    return await aiAction("expand", topic);
+}
 
-        return result;
+/* ==============================
+   Explain Node
+============================== */
 
-    } catch (error) {
-        console.error(error);
-
-        return null;
-    }
+export async function explainMindMapNode(topic) {
+    return await aiAction("explain", topic);
 }

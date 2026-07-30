@@ -7,7 +7,7 @@ import FloatingMenu from "../workspace/FloatingMenu";
 
 import AIInput from "../components/AIInput";
 
-import { generateMindMap } from "../services/api";
+import { generateMindMap } from "../services/aiService";
 import { jsonToFlow } from "../utils/jsonToFlow";
 
 import useMindMap from "../hooks/useMindMap";

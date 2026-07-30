@@ -57,13 +57,6 @@ function useMindMap() {
                 .trim()
                 .toLowerCase();
 
-
-        console.log(
-            "Searching:",
-            keyword
-        );
-
-
         /*
         If search input is empty,
         remove previous highlight.
@@ -138,13 +131,6 @@ function useMindMap() {
 
                 }
             );
-
-
-        console.log(
-            "Found:",
-            foundNode
-        );
-
 
         /*
         Save matching node ID.
