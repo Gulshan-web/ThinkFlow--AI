@@ -16,10 +16,9 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://think-flow-ai-zeta.vercel.app",
+      "https://thinkflow-frontend-w42x.onrender.com",
     ],
     methods: ["GET", "POST", "OPTIONS"],
-    credentials: true,
   })
 );
 
