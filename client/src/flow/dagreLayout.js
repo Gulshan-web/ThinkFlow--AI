@@ -1,8 +1,8 @@
 import dagre from "@dagrejs/dagre";
 import { Position } from "reactflow";
 
-const nodeWidth = 340;
-const nodeHeight = 220;
+const nodeWidth = 300;
+const nodeHeight = 200;
 
 export function getLayoutedElements(
     nodes,
