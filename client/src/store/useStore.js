@@ -1107,31 +1107,35 @@ const useStore = create(
         /* ----------------------------------------- */
         explainNodeAI: async (topic) => {
 
-            try {
+    alert("STEP 1");
 
-                const { explainMindMapNode } =
-                    await import("../services/aiService");
+    try {
 
-                const result =
-                    await explainMindMapNode(topic);
+        alert("STEP 2");
 
-                set({
+        const { explainMindMapNode } = await import("../services/aiService");
 
-                    aiExplanation: result,
+        alert("STEP 3");
 
-                    showAIExplanation: true,
+        const result = await explainMindMapNode(topic);
 
-                });
+        alert("STEP 4");
 
-            }
+        console.log(result);
 
-            catch (err) {
+        set({
+            aiExplanation: result,
+            showAIExplanation: true,
+        });
 
-                console.error(err);
+    } catch (err) {
 
-            }
+        alert(err.message);
+        console.error(err);
 
-        },
+    }
+
+},
         async expandNodeAI(
             id
         ) {
