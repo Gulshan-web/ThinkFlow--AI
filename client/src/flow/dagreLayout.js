@@ -17,15 +17,15 @@ export function getLayoutedElements(
     dagreGraph.setGraph({
     rankdir: "TB",
 
-    ranksep: 260,
+    ranksep: 200,
 
-    nodesep: 180,
+    nodesep: 130,
 
     edgesep: 80,
 
-    marginx: 120,
+    marginx: 100,
 
-    marginy: 120,
+    marginy: 100,
 });
 
     nodes.forEach((node) => {
