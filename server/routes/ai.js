@@ -56,23 +56,23 @@ Format:
 
         const raw = completion.choices[0].message.content;
 
-const cleaned = raw
-  .replace(/```json/g, "")
-  .replace(/```/g, "")
-  .trim();
+        const cleaned = raw
+            .replace(/```json/g, "")
+            .replace(/```/g, "")
+            .trim();
 
-try {
-    const parsed = JSON.parse(cleaned);
-    return res.json(parsed);
-} catch (err) {
+        try {
+            const parsed = JSON.parse(cleaned);
+            return res.json(parsed);
+        } catch (err) {
 
 
-    return res.json({
-        title: topic,
-        summary: cleaned,
-        keyPoints: [],
-    });
-}
+            return res.json({
+                title: topic,
+                summary: cleaned,
+                keyPoints: [],
+            });
+        }
     } catch (err) {
         console.error(err);
 
@@ -94,7 +94,7 @@ router.post("/expand", async (req, res) => {
         }
 
         const response = await groq.chat.completions.create({
-            
+
             model: "llama-3.3-70b-versatile",
 
             messages: [
@@ -131,27 +131,27 @@ Return only JSON.
         const raw = response.choices[0].message.content;
 
 
-const cleaned = raw
-  .replace(/```json/g, "")
-  .replace(/```/g, "")
-  .trim();
+        const cleaned = raw
+            .replace(/```json/g, "")
+            .replace(/```/g, "")
+            .trim();
 
-try {
-    res.json(JSON.parse(cleaned));
-}
-catch {
+        try {
+            res.json(JSON.parse(cleaned));
+        }
+        catch {
 
-    res.json({
+            res.json({
 
-        title: topic,
+                title: topic,
 
-        summary: cleaned,
+                summary: cleaned,
 
-        keyPoints: []
+                keyPoints: []
 
-    });
+            });
 
-}
+        }
 
     } catch (err) {
 
@@ -246,23 +246,30 @@ Return ONLY valid JSON.
 =========================================== */
 
 router.post("/chat", async (req, res) => {
+
     try {
 
-        const { topic, question } = req.body;
+        const {
+            topic,
+            question,
+            history = [],
+        } = req.body;
 
         if (!topic || !question) {
+
             return res.status(400).json({
                 error: "Topic and question are required."
             });
+
         }
 
         const response = await groq.chat.completions.create({
 
             model: "llama-3.3-70b-versatile",
 
-            temperature: 0.5,
+            temperature: 0.4,
 
-            max_tokens: 700,
+            max_tokens: 900,
 
             messages: [
 
@@ -270,40 +277,104 @@ router.post("/chat", async (req, res) => {
                     role: "system",
 
                     content: `
-You are an expert AI tutor.
+You are ThinkFlow AI's coding assistant.
 
 Rules:
 
-- Answer only about the given topic.
-- Keep explanations clear.
-- Use simple language.
-- Give examples whenever possible.
-- Never return JSON.
-- Never return markdown.
+1. Keep previous conversation context.
+2. Answer ONLY about the selected topic.
+3. If user asks for ANY programming code,
+   ALWAYS return fenced markdown code blocks.
+
+Example:
+
+\`\`\`javascript
+function hello() {
+  console.log("Hello");
+}
+\`\`\`
+
+4. Explain after the code.
+5. Never return JSON.
 `
+
                 },
+
+                ...history,
 
                 {
                     role: "user",
-
-                    content: `
-Topic:
-${topic}
-
-Question:
-${question}
-`
+                    content: question
                 }
 
             ]
 
         });
 
+        let answer =
+            response.choices[0].message.content.trim();
+
+
+        /* =====================================
+           AUTO FIX CODE BLOCKS
+        ====================================== */
+
+        const looksLikeCode =
+            answer.includes("function ") ||
+            answer.includes("const ") ||
+            answer.includes("let ") ||
+            answer.includes("var ") ||
+            answer.includes("class ") ||
+            answer.includes("=>") ||
+            answer.includes("import ") ||
+            answer.includes("export ");
+
+        if (looksLikeCode && !answer.includes("```")) {
+
+            const lines = answer.split("\n");
+
+            let code = [];
+            let explanation = [];
+
+            let started = false;
+
+            for (const line of lines) {
+
+                if (
+                    line.includes("function ") ||
+                    line.includes("const ") ||
+                    line.includes("let ") ||
+                    line.includes("var ") ||
+                    line.includes("class ") ||
+                    line.includes("import ") ||
+                    line.includes("export ")
+                ) {
+                    started = true;
+                }
+
+                if (started)
+                    code.push(line);
+                else
+                    explanation.push(line);
+
+            }
+
+            answer = "";
+
+            if (explanation.length) {
+
+                answer += explanation.join("\n\n") + "\n\n";
+
+            }
+
+            answer +=
+`\`\`\`javascript
+${code.join("\n")}
+\`\`\``;
+
+        }
         return res.json({
-
-            answer:
-                response.choices[0].message.content.trim()
-
+            answer
         });
 
     }
@@ -313,9 +384,7 @@ ${question}
         console.error(err);
 
         return res.status(500).json({
-
             error: err.message
-
         });
 
     }

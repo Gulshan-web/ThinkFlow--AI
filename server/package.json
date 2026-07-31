@@ -12,6 +12,10 @@
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "groq-sdk": "^1.4.0",
-    "openai": "^6.49.0"
+    "highlight.js": "^11.11.1",
+    "openai": "^6.49.0",
+    "react-markdown": "^10.1.0",
+    "react-syntax-highlighter": "^16.1.1",
+    "remark-gfm": "^4.0.1"
   }
 }
