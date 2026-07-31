@@ -56,9 +56,6 @@ Format:
 
         const raw = completion.choices[0].message.content;
 
-console.log("RAW RESPONSE:");
-console.log(raw);
-
 const cleaned = raw
   .replace(/```json/g, "")
   .replace(/```/g, "")
@@ -69,8 +66,6 @@ try {
     return res.json(parsed);
 } catch (err) {
 
-    console.log("INVALID JSON");
-    console.log(cleaned);
 
     return res.json({
         title: topic,
@@ -135,7 +130,6 @@ Return only JSON.
 
         const raw = response.choices[0].message.content;
 
-console.log(raw);
 
 const cleaned = raw
   .replace(/```json/g, "")
@@ -216,8 +210,6 @@ Return ONLY valid JSON.
 
         const raw = response.choices[0].message.content;
 
-        console.log("EXPLAIN RESPONSE:");
-        console.log(raw);
 
         const cleaned = raw
             .replace(/```json/g, "")

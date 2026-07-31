@@ -1107,21 +1107,11 @@ const useStore = create(
         /* ----------------------------------------- */
         explainNodeAI: async (topic) => {
 
-    alert("STEP 1");
-
     try {
-
-        alert("STEP 2");
 
         const { explainMindMapNode } = await import("../services/aiService");
 
-        alert("STEP 3");
-
         const result = await explainMindMapNode(topic);
-
-        alert("STEP 4");
-
-        console.log(result);
 
         set({
             aiExplanation: result,
@@ -1130,10 +1120,11 @@ const useStore = create(
 
     } catch (err) {
 
-        alert(err.message);
         console.error(err);
 
     }
+
+
 
 },
         async expandNodeAI(
