@@ -240,4 +240,85 @@ Return ONLY valid JSON.
 
     }
 });
+
+/* ===========================================
+   AI CHAT
+=========================================== */
+
+router.post("/chat", async (req, res) => {
+    try {
+
+        const { topic, question } = req.body;
+
+        if (!topic || !question) {
+            return res.status(400).json({
+                error: "Topic and question are required."
+            });
+        }
+
+        const response = await groq.chat.completions.create({
+
+            model: "llama-3.3-70b-versatile",
+
+            temperature: 0.5,
+
+            max_tokens: 700,
+
+            messages: [
+
+                {
+                    role: "system",
+
+                    content: `
+You are an expert AI tutor.
+
+Rules:
+
+- Answer only about the given topic.
+- Keep explanations clear.
+- Use simple language.
+- Give examples whenever possible.
+- Never return JSON.
+- Never return markdown.
+`
+                },
+
+                {
+                    role: "user",
+
+                    content: `
+Topic:
+${topic}
+
+Question:
+${question}
+`
+                }
+
+            ]
+
+        });
+
+        return res.json({
+
+            answer:
+                response.choices[0].message.content.trim()
+
+        });
+
+    }
+
+    catch (err) {
+
+        console.error(err);
+
+        return res.status(500).json({
+
+            error: err.message
+
+        });
+
+    }
+
+});
 export default router;
