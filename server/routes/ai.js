@@ -181,50 +181,6 @@ router.post("/explain", async (req, res) => {
             });
         }
 
-        const completion = await groq.chat.completions.create({
-            model: "llama-3.3-70b-versatile",
-            temperature: 0.3,
-            max_tokens: 700,
-            messages: [
-                {
-                    role: "system",
-                    content: `
-You are an AI tutor.
-
-Return ONLY valid JSON.
-
-Format:
-
-{
-  "title":"Topic",
-  "summary":"2-4 paragraph explanation",
-  "keyPoints":[
-    "Point 1",
-    "Point 2",
-    "Point 3",
-    "Point 4"
-  ]
-}
-`
-                },
-                {
-                    role: "user",
-                    content: topic,
-                },
-            ],
-        });
-
-        router.post("/explain", async (req, res) => {
-    try {
-
-        const { topic } = req.body;
-
-        if (!topic) {
-            return res.status(400).json({
-                error: "Topic is required",
-            });
-        }
-
         const response = await groq.chat.completions.create({
             model: "llama-3.3-70b-versatile",
             temperature: 0.4,
@@ -235,11 +191,20 @@ Format:
                     content: `
 You are an expert teacher.
 
-Explain the topic clearly using plain text.
+Explain the topic clearly.
 
-Do NOT return JSON.
-Do NOT use markdown.
-Do NOT use code blocks.
+Return ONLY valid JSON.
+
+{
+"title":"Topic",
+"summary":"Detailed explanation",
+"keyPoints":[
+"Point 1",
+"Point 2",
+"Point 3",
+"Point 4"
+]
+}
 `
                 },
                 {
@@ -249,13 +214,29 @@ Do NOT use code blocks.
             ]
         });
 
-        const explanation = response.choices[0].message.content.trim();
+        const raw = response.choices[0].message.content;
 
-        return res.json({
-            title: topic,
-            summary: explanation,
-            keyPoints: []
-        });
+        console.log("EXPLAIN RESPONSE:");
+        console.log(raw);
+
+        const cleaned = raw
+            .replace(/```json/g, "")
+            .replace(/```/g, "")
+            .trim();
+
+        try {
+
+            return res.json(JSON.parse(cleaned));
+
+        } catch {
+
+            return res.json({
+                title: topic,
+                summary: cleaned,
+                keyPoints: []
+            });
+
+        }
 
     } catch (err) {
 
@@ -267,17 +248,4 @@ Do NOT use code blocks.
 
     }
 });
-    } catch (err) {
-
-        console.error(err);
-
-        res.status(500).json({
-            error: err.message,
-        });
-
-    }
-});
-
-
-
 export default router;
