@@ -15,6 +15,7 @@ import {
     Trash2,
     Copy,
     Sparkles,
+    MessageCircle,
 } from "lucide-react";
 
 import useMindMap from "../hooks/useMindMap";
@@ -27,17 +28,26 @@ function CustomNode({
 }) {
 
     const {
+
     deleteNode,
     duplicateNode,
     setSelectedNode,
     expandNodeAI,
     explainNodeAI,
+    openAIChat,
     searchedNodeId,
+
 } = useMindMap();
 
     function handleExplain() {
         explainNodeAI(data.label);
     }
+
+    function handleChat() {
+
+    openAIChat(data.label);
+
+}
 
 
     /* =====================================
@@ -475,6 +485,26 @@ function CustomNode({
                 >
                     <BookOpen size={16} />
                 </button>
+
+                <button
+
+    onClick={handleChat}
+
+    className="
+        rounded-lg
+        bg-slate-700
+        p-2
+        transition
+        hover:bg-orange-500
+    "
+
+    title="Chat with AI"
+
+>
+
+    <MessageCircle size={16} />
+
+</button>
                
 
                 <button

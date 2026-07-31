@@ -1,4 +1,4 @@
-import { X, Copy } from "lucide-react";
+import { X, Copy, MessageCircle } from "lucide-react";
 
 function AIExplainModal({
 
@@ -7,6 +7,8 @@ function AIExplainModal({
     explanation,
 
     onClose,
+
+    openAIChat,
 
 }) {
 
@@ -71,36 +73,59 @@ function AIExplainModal({
 
                 </ul>
 
-                <button
+                <div className="flex items-center gap-4">
 
-                    onClick={() => {
+                    <button
 
-                        navigator.clipboard.writeText(
+                        onClick={() => {
 
-                            JSON.stringify(
+                            navigator.clipboard.writeText(
 
-                                explanation,
+                                JSON.stringify(
 
-                                null,
+                                    explanation,
 
-                                2
+                                    null,
 
-                            )
+                                    2
 
-                        );
+                                )
 
-                    }}
+                            );
 
-                    className="flex items-center gap-2 rounded-xl bg-cyan-500 px-5 py-3 font-semibold text-white hover:bg-cyan-600"
+                        }}
 
-                >
+                        className="flex items-center gap-2 rounded-xl bg-cyan-500 px-5 py-3 font-semibold text-white hover:bg-cyan-600"
 
-                    <Copy size={18} />
+                    >
 
-                    Copy
+                        <Copy size={18} />
 
-                </button>
+                        Copy
 
+                    </button>
+
+                    <button
+
+                        onClick={() => {
+
+                            openAIChat(explanation.title);
+
+                            onClose();
+
+                        }}
+
+                        className="flex items-center gap-2 rounded-xl bg-purple-600 px-5 py-3 font-semibold text-white hover:bg-purple-700"
+
+                    >
+
+                        <MessageCircle size={18} />
+
+                        Continue Chat
+
+                    </button>
+
+                </div>
             </div>
 
         </div>

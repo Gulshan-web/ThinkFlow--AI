@@ -9,41 +9,50 @@ function useMindMap() {
 
     const {
 
-        nodes,
-        edges,
+    nodes,
+    edges,
 
-        selectedNode,
+    selectedNode,
 
-        searchedNodeId,
+    searchedNodeId,
 
-        onNodesChange,
-        onEdgesChange,
-        onConnect,
+    onNodesChange,
+    onEdgesChange,
+    onConnect,
 
-        addNode,
-        updateNode,
-        deleteNode,
-        duplicateNode,
+    addNode,
+    updateNode,
+    deleteNode,
+    duplicateNode,
 
-        setSelectedNode,
+    setSelectedNode,
 
-        clearCanvas,
+    clearCanvas,
 
-        undo,
-        redo,
+    undo,
+    redo,
 
-        expandNodeAI,
-        explainNodeAI,
+    expandNodeAI,
+    explainNodeAI,
 
-        loadAIMindMap,
+    openAIChat,
+    closeAIChat,
+    sendChatMessage,
 
-        setSearchedNode,
+    chatMessages,
+    chatLoading,
+    showAIChat,
+    chatTopic,
 
-        aiExplanation,
-        showAIExplanation,
-        closeAIExplanation,
+    loadAIMindMap,
 
-    } = useStore();
+    setSearchedNode,
+
+    aiExplanation,
+    showAIExplanation,
+    closeAIExplanation,
+
+} = useStore();
 
     /* =========================================
        SEARCH NODE
@@ -179,15 +188,23 @@ function useMindMap() {
 
         /* AI */
 
-        expandNodeAI,
-        explainNodeAI,
+expandNodeAI,
+explainNodeAI,
 
-        loadAIMindMap,
+openAIChat,
+closeAIChat,
+sendChatMessage,
 
-        aiExplanation,
-        showAIExplanation,
-        closeAIExplanation,
+chatMessages,
+chatLoading,
+showAIChat,
+chatTopic,
 
+loadAIMindMap,
+
+aiExplanation,
+showAIExplanation,
+closeAIExplanation,
         /* EXPORT */
 
         exportJSON,

@@ -23,3 +23,17 @@ export async function expandMindMapNode(topic) {
 export async function explainMindMapNode(topic) {
     return await aiAction("explain", topic);
 }
+
+/* ==============================
+   AI Chat
+============================== */
+
+export async function chatWithAI(topic, question, history = []) {
+
+    return await aiAction("chat", {
+        topic,
+        question,
+        history,
+    });
+
+}

@@ -5,7 +5,7 @@ import FlowCanvas from "../workspace/FlowCanvas";
 import RightSidebar from "../workspace/RightSidebar";
 import FloatingMenu from "../workspace/FloatingMenu";
 import AIExplainModal from "../components/ai/AIExplainModal";
-
+import AIChatSidebar from "../components/ai/AIChatSidebar";
 import AIInput from "../components/AIInput";
 
 import { generateMindMap } from "../services/aiService";
@@ -30,13 +30,22 @@ function Workspace() {
     */
 
     const {
+
     nodes,
     loadAIMindMap,
 
     aiExplanation,
     showAIExplanation,
-
     closeAIExplanation,
+
+    showAIChat,
+    closeAIChat,
+
+    chatMessages,
+    chatLoading,
+    chatTopic,
+
+    sendChatMessage,
 
 } = useMindMap();
 
@@ -67,7 +76,7 @@ function Workspace() {
                 );
 
 
-        
+
 
 
             const converted =
@@ -186,9 +195,24 @@ function Workspace() {
 
             <FloatingMenu />
             <AIExplainModal
-    open={showAIExplanation}
-    explanation={aiExplanation}
-    onClose={closeAIExplanation}
+                open={showAIExplanation}
+                explanation={aiExplanation}
+                onClose={closeAIExplanation}
+            />
+            <AIChatSidebar
+
+    open={showAIChat}
+
+    topic={chatTopic}
+
+    messages={chatMessages}
+
+    loading={chatLoading}
+
+    onSend={sendChatMessage}
+
+    onClose={closeAIChat}
+
 />
 
         </div>

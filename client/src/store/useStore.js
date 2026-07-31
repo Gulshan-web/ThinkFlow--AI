@@ -137,6 +137,46 @@ const useStore = create(
         aiExplanation: null,
         showAIExplanation: false,
 
+        openAIChat(topic) {
+
+            set({
+
+                showAIChat: true,
+
+                chatTopic: topic,
+
+                chatMessages: []
+
+            });
+
+        },
+
+        closeAIChat() {
+
+            set({
+
+                showAIChat: false,
+
+                chatMessages: [],
+
+                chatTopic: null,
+
+            });
+
+        },
+
+        /* ----------------------------------------- */
+        /* AI CHAT                                   */
+        /* ----------------------------------------- */
+
+        chatMessages: [],
+
+        chatLoading: false,
+
+        showAIChat: false,
+
+        chatTopic: null,
+
         /* ----------------------------------------- */
         /* INITIAL STATE                             */
         /* ----------------------------------------- */
@@ -1107,24 +1147,112 @@ const useStore = create(
         /* ----------------------------------------- */
         explainNodeAI: async (topic) => {
 
+            try {
+
+                const { explainMindMapNode } = await import("../services/aiService");
+
+                const result = await explainMindMapNode(topic);
+
+                set({
+                    aiExplanation: result,
+                    showAIExplanation: true,
+                });
+
+            } catch (err) {
+
+                console.error(err);
+
+            }
+
+        },
+        sendChatMessage: async (question) => {
+
     try {
 
-        const { explainMindMapNode } = await import("../services/aiService");
+        const {
 
-        const result = await explainMindMapNode(topic);
+            chatTopic,
+
+            chatMessages,
+
+        } = get();
+
+        if (!chatTopic) return;
+
+        // New history with current user message
+        const updatedMessages = [
+
+            ...chatMessages,
+
+            {
+
+                role: "user",
+
+                content: question,
+
+            },
+
+        ];
 
         set({
-            aiExplanation: result,
-            showAIExplanation: true,
+
+            chatLoading: true,
+
+            chatMessages: updatedMessages,
+
         });
 
-    } catch (err) {
+        const {
 
-        console.error(err);
+            chatWithAI,
+
+        } = await import("../services/aiService");
+
+        const result = await chatWithAI(
+
+            chatTopic,
+
+            question,
+
+            updatedMessages
+
+        );
+
+        set({
+
+            chatLoading: false,
+
+            chatMessages: [
+
+                ...updatedMessages,
+
+                {
+
+                    role: "assistant",
+
+                    content: result.answer,
+
+                },
+
+            ],
+
+        });
 
     }
 
+    catch (err) {
 
+        console.error(err);
+
+        toast.error("AI Chat Failed");
+
+        set({
+
+            chatLoading: false,
+
+        });
+
+    }
 
 },
         async expandNodeAI(
