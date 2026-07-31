@@ -45,6 +45,9 @@ export async function expandNode(topic) {
 /* ---------------- Explain Node ---------------- */
 
 export async function explainNode(topic) {
+
+  console.log("Sending request:", topic);
+
   const response = await fetch(`${API}/explain`, {
     method: "POST",
     headers: {
@@ -55,9 +58,15 @@ export async function explainNode(topic) {
     }),
   });
 
+  console.log("Status:", response.status);
+
+  const text = await response.text();
+
+  console.log("Raw Response:", text);
+
   if (!response.ok) {
-    throw new Error("Failed to explain node");
+    throw new Error(text);
   }
 
-  return await response.json();
+  return JSON.parse(text);
 }
