@@ -1,14 +1,12 @@
-import { memo } from "react";
-
-import { BookOpen } from "lucide-react";
 import {
-    Handle,
-    Position,
-} from "reactflow";
-
-import {
-    motion,
-} from "framer-motion";
+    memo,
+    useState,
+    useEffect,
+    useCallback,
+} from "react";
+import { Handle, Position } from "reactflow";
+import { motion } from "framer-motion";
+import NodeContextMenu from "../components/ui/NodeContextMenu";
 
 import {
     Edit3,
@@ -16,10 +14,12 @@ import {
     Copy,
     Sparkles,
     MessageCircle,
+    BookOpen,
+    Circle,
+    Palette,
+    BrainCircuit,
 } from "lucide-react";
-
 import useMindMap from "../hooks/useMindMap";
-
 
 function CustomNode({
     id,
@@ -28,580 +28,389 @@ function CustomNode({
 }) {
 
     const {
+        deleteNode,
+        duplicateNode,
+        setSelectedNode,
+        expandNodeAI,
+        explainNodeAI,
+        openAIChat,
+        searchedNodeId,
+    } = useMindMap();
+    const [menu, setMenu] = useState({
+    open: false,
+    x: 0,
+    y: 0,
+});
 
-    deleteNode,
-    duplicateNode,
-    setSelectedNode,
-    expandNodeAI,
-    explainNodeAI,
-    openAIChat,
-    searchedNodeId,
+const handleContextMenu = useCallback((e) => {
 
-} = useMindMap();
+    e.preventDefault();
+    e.stopPropagation();
+
+    setMenu({
+
+        open: true,
+
+        x: e.clientX,
+
+        y: e.clientY,
+
+    });
+
+}, []);
+
+const closeMenu = useCallback(() => {
+
+    setMenu({
+
+        open:false,
+
+        x:0,
+
+        y:0,
+
+    });
+
+}, []);
+useEffect(() => {
+
+    function handleClick() {
+
+        closeMenu();
+
+    }
+
+    function handleEsc(e){
+
+        if(e.key==="Escape"){
+
+            closeMenu();
+
+        }
+
+    }
+
+    window.addEventListener("click",handleClick);
+
+    window.addEventListener("keydown",handleEsc);
+
+    return ()=>{
+
+        window.removeEventListener("click",handleClick);
+
+        window.removeEventListener("keydown",handleEsc);
+
+    };
+
+},[closeMenu]);
+
+    const nodeColor =
+        data?.color || "#3b82f6";
+
+    const isSearched =
+        searchedNodeId === id;
+
+    const nodeStyle = {
+
+        background: `
+            linear-gradient(
+                180deg,
+                ${nodeColor},
+                ${nodeColor}E6
+            )
+        `,
+
+        border: `2px solid ${isSearched
+            ? "#facc15"
+            : selected
+                ? "#22d3ee"
+                : `${nodeColor}88`
+            }`,
+
+        boxShadow: isSearched
+            ? `
+        0 0 0 4px rgba(250,204,21,.45),
+        0 0 30px rgba(250,204,21,.35),
+        0 20px 60px rgba(0,0,0,.40)
+      `
+            : selected
+                ? `
+        0 0 0 3px rgba(34,211,238,.45),
+        0 0 40px rgba(34,211,238,.35),
+        0 20px 60px rgba(0,0,0,.40)
+      `
+                : `
+        0 12px 35px rgba(0,0,0,.25)
+      `,
+    };
+
+    function handleEdit() {
+
+        setSelectedNode({
+            id,
+            data,
+        });
+
+    }
+
+    function handleDelete() {
+        deleteNode(id);
+    }
+
+    function handleDuplicate() {
+        duplicateNode(id);
+    }
 
     function handleExplain() {
         explainNodeAI(data.label);
     }
 
     function handleChat() {
-
-    openAIChat(data.label);
-
-}
-
-
-    /* =====================================
-       NODE ACTIONS
-    ===================================== */
-
-    function handleEdit() {
-
-        setSelectedNode({
-
-            id,
-
-            data,
-
-        });
-
+        openAIChat(data.label);
     }
 
-
-    function handleDelete() {
-
-        deleteNode(
-            id
-        );
-
+    function handleExpand() {
+        expandNodeAI(id);
     }
-
-
-    function handleDuplicate() {
-
-        duplicateNode(
-            id
-        );
-
-    }
-
-
-    function handleAIExpand() {
-
-        expandNodeAI(
-            id
-        );
-
-    }
-
-
-    /* =====================================
-       NODE COLOR
-    ===================================== */
-
-    const nodeColor =
-
-        data?.color ||
-
-        "#06b6d4";
-
-
-    /* =====================================
-       SEARCH STATE
-    ===================================== */
-
-    const isSearchedNode =
-
-        searchedNodeId === id;
-
-
-    /* =====================================
-       NODE STYLE
-    ===================================== */
-
-    const nodeStyle = {
-
-        background:
-
-            nodeColor,
-
-
-        /*
-        Search match hone par
-        yellow border.
-        */
-
-        borderColor:
-
-            isSearchedNode
-
-                ? "#facc15"
-
-                : selected
-
-                    ? "#22d3ee"
-
-                    : "#000000",
-
-
-        /*
-        Search match hone par
-        strong yellow glow.
-        */
-
-        boxShadow:
-
-            isSearchedNode
-
-                ? `
-                    0 0 0 5px
-                    rgba(
-                        250,
-                        204,
-                        21,
-                        0.50
-                    ),
-
-                    0 0 35px
-                    rgba(
-                        250,
-                        204,
-                        21,
-                        0.90
-                    ),
-
-                    0 12px 35px
-                    rgba(
-                        0,
-                        0,
-                        0,
-                        0.50
-                    )
-                  `
-
-                : selected
-
-                    ? `
-                        0 0 0 3px
-                        rgba(
-                            34,
-                            211,
-                            238,
-                            0.35
-                        ),
-
-                        0 10px 25px
-                        rgba(
-                            0,
-                            0,
-                            0,
-                            0.35
-                        )
-                      `
-
-                    : `
-                        0 10px 25px
-                        rgba(
-                            0,
-                            0,
-                            0,
-                            0.35
-                        )
-                      `,
-
-    };
-
-
     return (
-
         <motion.div
+            onContextMenu={handleContextMenu}
+            initial={{
+                opacity: 0,
+                y: 15,
+                scale: .95,
+            }}
+            animate={{
+                opacity: 1,
+                y: 0,
+                scale: selected ? 1.04 : 1,
+                rotate: 0,
+            }}
 
             whileHover={{
-
-                scale:
-
-                    1.04,
-
+                scale: selected ? 1.05 : 1.03,
+                y: -6,
             }}
 
             transition={{
-
-                duration:
-
-                    0.2,
-
+                type: "spring",
+                stiffness: 250,
+                damping: 18,
+                duration: 0.25,
             }}
-
             className={`
-
-                relative
-
-                min-w-[230px]
-
-                rounded-2xl
-
-                border-2
-
-                p-4
-
-                shadow-xl
-
-                transition-all
-
-                ${isSearchedNode
-
-                    ? `
-                            border-yellow-400
-
-                            ring-4
-
-                            ring-yellow-400/70
-
-                            animate-pulse
-                          `
-
-                    : selected
-
-                        ? `
-                                border-cyan-400
-
-                                ring-2
-
-                                ring-cyan-400/40
-                              `
-
-                        : `
-                                border-black
-                              `
-
-                }
-
-            `}
-
-            style={
-
-                nodeStyle
-
-            }
-
+        group
+        relative
+        min-w-[350px]
+        max-w-[350px]
+        min-h-[260px]
+        overflow-hidden
+        rounded-2xl
+        border
+        backdrop-blur-2xl
+        hover:border-cyan-400/40
+      `}
+            style={nodeStyle}
         >
 
-
-            {/* =============================
-                TARGET HANDLE
-            ============================= */}
-
             <Handle
-
                 type="target"
-
-                position={
-
-                    Position.Top
-
-                }
-
+                position={Position.Top}
+                className="
+        !h-4
+        !w-4
+        !border-3
+        !border-white
+        !bg-white
+        transition-all
+    "
             />
 
+            <div className="relative z-10 px-6 py-6">
 
-            {/* =============================
-                TITLE
-            ============================= */}
+                {/* ==========================
+        HEADER
+    ========================== */}
 
-            <h3
-                className="
-                    mb-2
-                    text-lg
+                <div className="flex items-start gap-6">
+
+                    <div
+
+                        style={{
+                            background: "rgba(255,255,255,.15)",
+                            border: "1px solid rgba(255,255,255,.18)",
+                        }}
+
+                        className="
+                flex
+                h-14
+                w-14
+                shrink-0
+                items-center
+                justify-center
+                rounded-2xl
+                backdrop-blur-xl
+            "
+
+                    >
+
+                        <Circle
+                            size={15}
+                            fill="#ffffff"
+                            color="#ffffff"
+                        />
+
+                    </div>
+
+                    <div className="flex-1">
+
+                        <h3
+                            className="
+                    text-[28px]
                     font-bold
+                    leading-7
+                    tracking-tight
                     text-white
+                    break-words
                 "
-            >
+                        >
+                            {data?.label}
+                        </h3>
 
-                {
+                        <div className="mt-3 flex items-center gap-2">
 
-                    data?.label
-
-                }
-
-            </h3>
-
-
-            {/* =============================
-                DESCRIPTION
-            ============================= */}
-
-            <p
-                className="
-                    mb-4
-                    text-sm
-                    text-slate-300
-                "
-            >
-
-                {
-
-                    data?.description ||
-
-                    "No description available"
-
-                }
-
-            </p>
-
-
-            {/* =============================
-                CATEGORY
-            ============================= */}
-
-            <span
-
-                className="
-
-                    rounded-full
-
-                    bg-cyan-500/20
-
-                    px-3
-
-                    py-1
-
-                    text-xs
-
-                    text-cyan-300
-
-                "
-
-            >
-
-                {
-
-                    data?.category ||
-
-                    "General"
-
-                }
-
-            </span>
-
-
-            {/* =============================
-                NODE TOOLBAR
-            ============================= */}
-
-            <div
-                className="
-
-                    mt-5
-
-                    flex
-
-                    justify-between
-
-                "
-            >
-
-
-                {/* EDIT */}
-
-                <button
-
-                    onClick={
-
-                        handleEdit
-
-                    }
-
-                    className="
-
-                        rounded-lg
-
-                        bg-slate-700
-
-                        p-2
-
-                        transition
-
-                        hover:bg-cyan-500
-
+                            <span
+                                className="
+                        rounded-full
+                        bg-white/15
+                        px-3
+                        py-1
+                        text-sm
+                        font-semibold
+                        text-white
+                        backdrop-blur
                     "
+                            >
+                                {data?.category || "General"}
+                            </span>
 
-                    title="Edit Node"
+                            {selected && (
 
+                                <motion.span
+
+                                    initial={{
+                                        opacity: 0,
+                                        scale: .8,
+                                    }}
+
+                                    animate={{
+                                        opacity: 1,
+                                        scale: 1,
+                                    }}
+
+                                    transition={{
+                                        duration: .25,
+                                    }}
+
+                                    className="
+rounded-full
+bg-cyan-400/20
+border
+border-cyan-300/30
+px-3
+py-1
+text-xs
+font-semibold
+text-cyan-200
+"
+
+                                >
+                                    Selected
+                                </motion.span>
+
+                            )}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {/* ==========================
+        DESCRIPTION
+    ========================== */}
+
+                <div
+                   className="
+mt-4
+rounded-2xl
+bg-black/10
+p-4
+min-h-[70px]
+backdrop-blur-lg
+"
                 >
 
-                    <Edit3
-                        size={16}
-                    />
-
-                </button>
-
-
-                {/* DUPLICATE */}
-
-                <button
-
-                    onClick={
-
-                        handleDuplicate
-
-                    }
-
-                    className="
-
-                        rounded-lg
-
-                        bg-slate-700
-
-                        p-2
-
-                        transition
-
-                        hover:bg-blue-500
-
-                    "
-
-                    title="Duplicate Node"
-
-                >
-
-                    <Copy
-                        size={16}
-                    />
-
-                </button>
-
-
-                {/* AI EXPAND */}
-
-                <button
-                    onClick={handleExplain}
-                    className="
-        rounded-lg
-        bg-slate-700
-        p-2
-        transition
-        hover:bg-emerald-500
-    "
-                    title="Explain with AI"
-                >
-                    <BookOpen size={16} />
-                </button>
-
-                <button
-
-    onClick={handleChat}
-
-    className="
-        rounded-lg
-        bg-slate-700
-        p-2
-        transition
-        hover:bg-orange-500
-    "
-
-    title="Chat with AI"
-
+                    <p
+className="
+text-[18px]
+leading-6
+font-medium
+text-white/95
+break-words
+whitespace-pre-wrap
+overflow-hidden
+"
+style={{
+    wordBreak: "break-word",
+}}
 >
+                    
+                        {data?.description ||
+                            "No description available"}
+                    </p>
 
-    <MessageCircle size={16} />
-
-</button>
-               
-
-                <button
-
-                    onClick={
-
-                        handleAIExpand
-
-                    }
-
-                    className="
-
-                        rounded-lg
-
-                        bg-slate-700
-
-                        p-2
-
-                        transition
-
-                        hover:bg-purple-500
-
-                    "
-
-                    title="Expand with AI"
-
-                >
-
-                    <Sparkles
-                        size={16}
-                    />
-
-                </button>
-
-
-                {/* DELETE */}
-
-                <button
-
-                    onClick={
-
-                        handleDelete
-
-                    }
-
-                    className="
-
-                        rounded-lg
-
-                        bg-slate-700
-
-                        p-2
-
-                        transition
-
-                        hover:bg-red-500
-
-                    "
-
-                    title="Delete Node"
-
-                >
-
-                    <Trash2
-                        size={16}
-                    />
-
-                </button>
-
-
+                </div>
+                {/* Bottom Accent */}
             </div>
 
-
-            {/* =============================
-                SOURCE HANDLE
-            ============================= */}
-
             <Handle
-
                 type="source"
-
-                position={
-
-                    Position.Bottom
-
-                }
-
+                position={Position.Bottom}
+                className="
+        !h-3
+        !w-3
+        !border-4
+        !border-white
+        !bg-white
+        transition-all
+    "
             />
+            <NodeContextMenu
 
+    open={menu.open}
 
+    x={menu.x}
+
+    y={menu.y}
+
+    onClose={closeMenu}
+
+    onEdit={handleEdit}
+
+    onExplain={handleExplain}
+
+    onChat={handleChat}
+
+    onDuplicate={handleDuplicate}
+
+    onDelete={handleDelete}
+
+    onExpand={handleExpand}
+
+/>
         </motion.div>
 
     );
-
 }
-
-
-export default memo(
-    CustomNode
-);
+export default memo(CustomNode);

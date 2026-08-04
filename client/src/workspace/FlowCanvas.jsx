@@ -8,6 +8,7 @@ import ReactFlow, {
     Background,
     MiniMap,
     Panel,
+    Controls,
     ConnectionLineType,
 } from "reactflow";
 
@@ -26,7 +27,7 @@ import EditNodeModal from "../components/ui/EditNodeModal";
 
 function FlowCanvas() {
 
-    
+
     const {
         nodes,
         edges,
@@ -94,13 +95,13 @@ function FlowCanvas() {
 
                     onInit={(instance) => {
 
-    console.log("ReactFlow Ready");
+                        console.log("ReactFlow Ready");
 
-    window.reactFlowInstance = instance;
+                        window.reactFlowInstance = instance;
 
-    console.log(window.reactFlowInstance);
+                        console.log(window.reactFlowInstance);
 
-}}
+                    }}
 
                     onNodesChange={onNodesChange}
                     onEdgesChange={onEdgesChange}
@@ -109,8 +110,23 @@ function FlowCanvas() {
                     fitView
 
                     fitViewOptions={{
-                        padding: 0.3,
+                        padding: 0.18,
+                        includeHiddenNodes: false,
                     }}
+                    nodesDraggable
+                    nodesConnectable
+                    elementsSelectable
+
+                    panOnDrag
+                    zoomOnScroll
+                    zoomOnPinch
+                    zoomOnDoubleClick={false}
+
+                    minZoom={0.35}
+                    maxZoom={2}
+
+                    elevateEdgesOnSelect
+                    elevateNodesOnSelect
 
                     defaultViewport={{
                         x: 0,
@@ -121,27 +137,19 @@ function FlowCanvas() {
                     defaultEdgeOptions={{
                         type: "smoothstep",
 
-                        animated: true,
+                        animated: false,
 
                         style: {
-                            stroke: "#22d3ee",
-                            strokeWidth: 3,
-                            filter:
-                                "drop-shadow(0 0 5px rgba(34, 211, 238, 0.8))",
+                            stroke: "#38bdf8",
+                            strokeWidth: 1.8,
+                            strokeLinecap: "round",
+                            strokeLinejoin: "round",
+                            opacity: 0.9,
                         },
 
-                        markerEnd: {
-                            type: "arrowclosed",
-                            color: "#22d3ee",
-                            width: 18,
-                            height: 18,
-                        },
+                        markerEnd: undefined,
                     }}
-
-                    connectionLineType={
-                        ConnectionLineType.SmoothStep
-                    }
-
+                    connectionLineType={ConnectionLineType.Bezier}
                     snapToGrid
                     snapGrid={[20, 20]}
 
@@ -155,19 +163,36 @@ function FlowCanvas() {
 
                 >
                     <Background
-                        gap={24}
-                        size={1.5}
-                        color="#334155"
+                        variant="dots"
+                        gap={22}
+                        size={1.2}
+                        color="#1f2937"
                     />
 
-                    <MiniMap
-                        pannable
-                        zoomable
-                        nodeStrokeWidth={3}
-                        nodeBorderRadius={8}
-                    />
-
-                    <FlowControls />
+                   <MiniMap
+    pannable
+    zoomable
+    zoomStep={0.5}
+    nodeBorderRadius={4}
+    nodeStrokeWidth={0}
+    maskColor="rgba(255,255,255,.08)"
+    nodeColor={() => "#6b7280"}
+    style={{
+        width: 200,
+        height: 150,
+        background: "#161c28",
+        border: "2px solid rgba(255,255,255,.18)",
+        borderRadius: "24px",
+        overflow: "hidden",
+        boxShadow: "0 20px 50px rgba(0,0,0,.45)",
+    }}
+/>
+                    <Controls
+    position="bottom-right"
+    showZoom={true}
+    showFitView={true}
+    showInteractive={true}
+/>
 
                     <Panel position="top-left">
                         <FlowToolbar />

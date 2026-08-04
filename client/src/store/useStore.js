@@ -190,7 +190,7 @@ const useStore = create(
 
         selectedNode:
             null,
-
+        contextMenu: null,
 
         searchedNodeId:
             null,
@@ -220,6 +220,17 @@ const useStore = create(
             });
 
         },
+        setContextMenu(menu) {
+    set({
+        contextMenu: menu,
+    });
+},
+
+closeContextMenu() {
+    set({
+        contextMenu: null,
+    });
+},
 
 
         /* ----------------------------------------- */

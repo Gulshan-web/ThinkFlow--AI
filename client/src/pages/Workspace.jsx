@@ -2,7 +2,6 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import WorkspaceHeader from "../workspace/WorkspaceHeader";
 import FlowCanvas from "../workspace/FlowCanvas";
-import RightSidebar from "../workspace/RightSidebar";
 import FloatingMenu from "../workspace/FloatingMenu";
 import AIExplainModal from "../components/ai/AIExplainModal";
 import AIChatSidebar from "../components/ai/AIChatSidebar";
@@ -184,14 +183,6 @@ function Workspace() {
                 </div>
 
             </div>
-
-
-            {sidebarOpen && (
-
-                <RightSidebar />
-
-            )}
-
 
             <FloatingMenu />
             <AIExplainModal

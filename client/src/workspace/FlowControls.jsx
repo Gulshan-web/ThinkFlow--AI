@@ -1,37 +1,47 @@
 import { Controls } from "reactflow";
-
 import { motion } from "framer-motion";
+
 function FlowControls() {
-    const controlStyle = {
-        background: "#0f172a",
-        border: "1px solid rgba(255,255,255,0.1)",
-        color: "#ffffff",
-        borderRadius: "12px",
-        boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
-    };
     return (
         <motion.div
             initial={{
                 opacity: 0,
+                x: 20,
                 scale: 0.9,
             }}
             animate={{
                 opacity: 1,
+                x: 0,
                 scale: 1,
             }}
             transition={{
-                duration: 0.3,
+                duration: 0.35,
             }}
+            className="
+                rounded-2xl
+                border
+                border-white/10
+                bg-slate-900/80
+                p-2
+                shadow-[0_20px_45px_rgba(0,0,0,.35)]
+                backdrop-blur-2xl
+            "
         >
             <Controls
                 position="bottom-right"
-                showZoom={true}
-                showFitView={true}
-                showInteractive={true}
-                style={controlStyle}
+                showZoom
+                showFitView
+                showInteractive
+
+                style={{
+                    background: "transparent",
+                    border: "none",
+                    boxShadow: "none",
+                    color: "#ffffff",
+                }}
             />
         </motion.div>
     );
-
 }
+
 export default FlowControls;
