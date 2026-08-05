@@ -1,10 +1,10 @@
 import {
     BrainCircuit,
     Sparkles,
-    Workflow,
     Download,
     Search,
-    Moon,
+    MessageCircle,
+    BookOpen,
 } from "lucide-react";
 
 import FeatureCard from "./FeatureCard";
@@ -21,28 +21,37 @@ function FeatureSection() {
         },
 
         {
-            icon: <Workflow size={34} />,
-            title: "Drag & Drop",
+            icon: <Sparkles size={34} />,
+            title: "AI Node Expansion",
             description:
-                "Move every node freely and organize ideas visually with React Flow.",
+                "Expand any node into detailed connected subtopics with one AI-powered click.",
             gradient:
-                "bg-gradient-to-br from-indigo-500/20 to-purple-500/10",
+                "bg-gradient-to-br from-purple-500/20 to-pink-500/10",
         },
 
         {
-            icon: <Sparkles size={34} />,
-            title: "Beautiful Animations",
+            icon: <BookOpen size={34} />,
+            title: "AI Explain",
             description:
-                "Every interaction feels smooth with Framer Motion powered animations.",
+                "Instantly generate detailed explanations for any selected idea or concept.",
             gradient:
-                "bg-gradient-to-br from-pink-500/20 to-purple-500/10",
+                "bg-gradient-to-br from-indigo-500/20 to-cyan-500/10",
+        },
+
+        {
+            icon: <MessageCircle size={34} />,
+            title: "AI Chat Assistant",
+            description:
+                "Brainstorm and ask follow-up questions directly from any selected node using AI.",
+            gradient:
+                "bg-gradient-to-br from-pink-500/20 to-orange-500/10",
         },
 
         {
             icon: <Download size={34} />,
             title: "Export",
             description:
-                "Download your complete mind map as PNG or PDF with one click.",
+                "Export your complete mind map as JSON, PNG or PDF with one click.",
             gradient:
                 "bg-gradient-to-br from-green-500/20 to-emerald-500/10",
         },
@@ -55,15 +64,6 @@ function FeatureSection() {
             gradient:
                 "bg-gradient-to-br from-orange-500/20 to-red-500/10",
         },
-
-        {
-            icon: <Moon size={34} />,
-            title: "Dark Mode",
-            description:
-                "Premium dark theme designed for long brainstorming sessions.",
-            gradient:
-                "bg-gradient-to-br from-slate-700/30 to-slate-900/30",
-        },
     ];
 
     return (
@@ -72,9 +72,9 @@ function FeatureSection() {
             className="relative py-28"
         >
             <div className="mx-auto max-w-7xl px-6">
-                {/* Heading */}
 
                 <div className="mb-20 text-center">
+
                     <span className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-5 py-2 text-sm text-cyan-300">
                         Features
                     </span>
@@ -88,11 +88,11 @@ function FeatureSection() {
                         interactive visualization and modern design into one
                         powerful brainstorming platform.
                     </p>
+
                 </div>
 
-                {/* Cards */}
-
                 <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+
                     {features.map((feature) => (
                         <FeatureCard
                             key={feature.title}
@@ -102,7 +102,9 @@ function FeatureSection() {
                             gradient={feature.gradient}
                         />
                     ))}
+
                 </div>
+
             </div>
         </section>
     );
